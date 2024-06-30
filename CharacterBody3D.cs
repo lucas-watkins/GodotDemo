@@ -19,38 +19,42 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 
 	private void HandleKeys(int movement)
 	{
-		if (Input.IsKeyPressed(Key.W))
+		var velocity = Vector3.Zero; 
+		if (Input.IsActionPressed("forward"))
 		{
-			MoveAndCollide(new Vector3(0, 0, movement));
+			velocity -= _playerCam.Transform.Basis.Z;
 		}
-		if (Input.IsKeyPressed(Key.D))
+		if (Input.IsActionPressed("right"))
 		{
-			MoveAndCollide(new Vector3(-movement, 0, 0)); 
+			velocity += _playerCam.Transform.Basis.X; 
 		}
 
 		if (Input.IsKeyPressed(Key.A))
 		{
-			MoveAndCollide(new Vector3(movement,0, 0)); 
+			velocity -= _playerCam.Transform.Basis.X; 
 		}
 
 		if (Input.IsKeyPressed(Key.S))
 		{
-			MoveAndCollide(new Vector3(0, 0, -movement));
+			velocity += _playerCam.Transform.Basis.Z;
 		}
+		
 		if (Input.IsKeyPressed(Key.Space))
 		{
-			MoveAndCollide(new Vector3(0, movement, 0));
+			velocity += new Vector3(0, movement, 0);
 		}
 
 		if (Input.IsKeyPressed(Key.Shift))
 		{
-			MoveAndCollide(new Vector3(0, -movement, 0)); 
+			velocity += new Vector3(0, -movement, 0); 
 		}
 
 		if (Input.IsKeyPressed(Key.Escape))
 		{
 			GetTree().Quit();
 		}
+
+		MoveAndCollide(velocity); 
 	}
 
 	public override void _PhysicsProcess(double delta)
