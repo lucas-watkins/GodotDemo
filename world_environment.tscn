@@ -1,0 +1,93 @@
+[gd_scene load_steps=15 format=3 uid="uid://lpqfsmi8q4rn"]
+
+[ext_resource type="Script" path="res://CharacterBody3D.cs" id="1_psrgf"]
+[ext_resource type="Script" path="res://FPSLabel.cs" id="2_ymmdw"]
+[ext_resource type="Texture2D" uid="uid://dk7mfp7me4kec" path="res://Marble016_4K-JPG/Marble016_4K-JPG_Color.jpg" id="3_dvsrw"]
+[ext_resource type="Texture2D" uid="uid://cqdsmnbsktgui" path="res://Marble016_4K-JPG/Marble016_4K-JPG_Displacement.jpg" id="4_nls86"]
+[ext_resource type="Texture2D" uid="uid://5xmhsn6ut6h" path="res://Marble016_4K-JPG/Marble016_4K-JPG_NormalGL.jpg" id="5_mxmc1"]
+[ext_resource type="Texture2D" uid="uid://b0si2op4eidb5" path="res://Marble016_4K-JPG/Marble016_4K-JPG_Roughness.jpg" id="6_g0cmv"]
+
+[sub_resource type="Environment" id="Environment_6vekg"]
+background_color = Color(0.894118, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_oro16"]
+size = Vector3(60, 0.1, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i7dwr"]
+size = Vector3(60, 0.1, 60)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cokrq"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qcprg"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_oyv8b"]
+radius = 2.0
+height = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6hij"]
+albedo_texture = ExtResource("3_dvsrw")
+roughness_texture = ExtResource("6_g0cmv")
+normal_enabled = true
+normal_scale = 3.33067e-16
+normal_texture = ExtResource("5_mxmc1")
+heightmap_scale = 16.0
+heightmap_texture = ExtResource("4_nls86")
+
+[sub_resource type="SphereMesh" id="SphereMesh_b70oh"]
+lightmap_size_hint = Vector2i(40, 15)
+material = SubResource("StandardMaterial3D_f6hij")
+custom_aabb = AABB(2.08165e-12, 2.08165e-12, 2.08165e-12, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+uv2_padding = 0.0
+radius = 1.0
+height = 2.0
+
+[node name="WorldEnvironment" type="WorldEnvironment"]
+environment = SubResource("Environment_6vekg")
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338975, 0.0802228, -0.0240927)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -1, 2.08165e-12)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.99996, 0.00891851, 0, -0.00891851, 0.99996, 2.08165e-12, 0, 2.08165e-12)
+mesh = SubResource("BoxMesh_oro16")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00273299, -0.0094769, -0.0357348)
+shape = SubResource("BoxShape3D_i7dwr")
+
+[node name="Character" type="CharacterBody3D" parent="."]
+script = ExtResource("1_psrgf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Character"]
+shape = SubResource("CapsuleShape3D_cokrq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.803084, 0)
+mesh = SubResource("CapsuleMesh_qcprg")
+
+[node name="CameraParent" type="Node3D" parent="Character"]
+
+[node name="PlayerCamera" type="Camera3D" parent="Character/CameraParent"]
+transform = Transform3D(-0.999448, 0, -0.0332251, 0, 1, 0, 0.0332251, 0, -0.999448, 0, 1.40884, 0)
+doppler_tracking = 2
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.820192, 0.572089, 0, -0.572089, 0.820192, 0, 9.51231, 33.6531)
+light_energy = 1.815
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DirectionalLight3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 1.64894e-07, 0, -2.84328e-08, 1, 0.00115776, 0.000639915, 0.00101852)
+mesh = SubResource("SphereMesh_oyv8b")
+
+[node name="FPSLabel" type="Label" parent="."]
+offset_right = 5360.0
+offset_bottom = 2302.0
+script = ExtResource("2_ymmdw")
+
+[node name="Sphere Shiny" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.36667, 0.22566, 2.32976)
+mesh = SubResource("SphereMesh_b70oh")
+skeleton = NodePath("")
