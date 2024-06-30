@@ -4,7 +4,9 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 	private Camera3D _playerCam;
 	private Node3D _cameraNode;
 	private const float Speed = 20f;
-	private float _gravity = -9.8f; 
+	private float _gravity = -9.8f;
+	private bool _jumping;
+	private int _jumpHeight = 5; 
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -41,11 +43,22 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 		
 		if (Input.IsActionPressed("up") && IsOnFloor())
 		{
-			velocity -= new Vector3(0, 10, 0);
+				_jumping = true;
 		}
+		
 		if (Input.IsKeyPressed(Key.Escape))
 		{
 			GetTree().Quit();
+		}
+
+		if (_jumping && Position.Y < _jumpHeight)
+		{
+			velocity -= new Vector3(0, 1, 0); 
+		}
+
+		if (Position.Y >= _jumpHeight)
+		{
+			_jumping = false; 
 		}
 		
 		Velocity = velocity * -sens; 
