@@ -1,8 +1,4 @@
 using Godot;
-using System;
-using System.ComponentModel;
-using Environment = Godot.Environment;
-
 public partial class CharacterBody3D : Godot.CharacterBody3D
 {
 	private Camera3D _playerCam;
@@ -40,17 +36,13 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 			velocity -= _playerCam.Transform.Basis.Z;
 		}
 		
-		if (Input.IsActionPressed("up"))
+		// this single line of code is preventing the player from taking off when looking up
+		velocity.Y = 0; 
+		
+		if (Input.IsActionPressed("up") && IsOnFloor())
 		{
-			velocity -= new Vector3(0, 1, 0);
+			velocity -= new Vector3(0, 10, 0);
 		}
-	
-		/*
-		if (Input.IsActionPressed("down"))
-		{
-			velocity += new Vector3(0, -movement, 0); 
-		}
-		*/
 		if (Input.IsKeyPressed(Key.Escape))
 		{
 			GetTree().Quit();

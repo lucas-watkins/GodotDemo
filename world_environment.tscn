@@ -75,8 +75,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 1.64894e-07, 0, -2.84328e-08, 1, 0.001157
 mesh = SubResource("SphereMesh_oyv8b")
 
 [node name="FPSLabel" type="Label" parent="."]
-offset_right = 5360.0
-offset_bottom = 2302.0
+offset_left = 10938.0
+offset_top = 7497.0
+offset_right = 16298.0
+offset_bottom = 9799.0
 script = ExtResource("2_ymmdw")
 
 [node name="Sphere Shiny" type="MeshInstance3D" parent="."]
