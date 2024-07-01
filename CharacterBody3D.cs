@@ -6,10 +6,12 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 	private const float Speed = 20f;
 	private float _gravity = -9.8f;
 	private bool _jumping;
-	private int _jumpHeight = 5; 
+	private int _jumpHeight = 5;
+	private int _jumpForce = 3; 
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+		DisplayServer.WindowSetMode(DisplayServer.WindowMode.Maximized); 
 		Engine.MaxFps = 120;
 		_playerCam = GetNode<Camera3D>("CameraParent/PlayerCamera");
 		_cameraNode = GetNode<Node3D>("CameraParent"); 
@@ -53,7 +55,7 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 
 		if (_jumping && Position.Y < _jumpHeight)
 		{
-			velocity -= new Vector3(0, 1, 0); 
+			velocity -= new Vector3(0, _jumpForce, 0); 
 		}
 
 		if (Position.Y >= _jumpHeight)

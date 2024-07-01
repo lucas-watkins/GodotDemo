@@ -1,7 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://lpqfsmi8q4rn"]
+[gd_scene load_steps=13 format=3 uid="uid://lpqfsmi8q4rn"]
 
 [ext_resource type="Script" path="res://CharacterBody3D.cs" id="1_psrgf"]
 [ext_resource type="Script" path="res://FPSLabel.cs" id="2_ymmdw"]
+[ext_resource type="Texture2D" uid="uid://c8amn50fn0xof" path="res://cursor.png" id="3_lp7l3"]
+[ext_resource type="Script" path="res://Cursor.cs" id="4_67w57"]
 
 [sub_resource type="Environment" id="Environment_6vekg"]
 background_color = Color(0.894118, 0, 0, 1)
@@ -20,18 +22,9 @@ size = Vector3(60, 0.1, 60)
 radius = 2.0
 height = 4.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f6hij"]
-normal_enabled = true
-normal_scale = 3.33067e-16
-heightmap_scale = 16.0
+[sub_resource type="PrismMesh" id="PrismMesh_os6tp"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_b70oh"]
-lightmap_size_hint = Vector2i(40, 15)
-material = SubResource("StandardMaterial3D_f6hij")
-custom_aabb = AABB(2.08165e-12, 2.08165e-12, 2.08165e-12, 2.08165e-12, 2.08165e-12, 2.08165e-12)
-uv2_padding = 0.0
-radius = 1.0
-height = 2.0
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_csb0m"]
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = SubResource("Environment_6vekg")
@@ -40,10 +33,10 @@ environment = SubResource("Environment_6vekg")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0338975, 0.0802228, -0.0240927)
 
 [node name="floor" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -1, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="floor"]
-transform = Transform3D(1, 0, 0, 0, 0.99996, 0.00891851, 0, -0.00891851, 0.99996, 2.08165e-12, 0, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0.000663223, 0, -0.000663223, 1, 2.08165e-12, 0, 2.08165e-12)
 mesh = SubResource("BoxMesh_oro16")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="floor"]
@@ -51,9 +44,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00273299, -0.0094769, -0.03
 shape = SubResource("BoxShape3D_i7dwr")
 
 [node name="Character" type="CharacterBody3D" parent="."]
+up_direction = Vector3(0.00235352, 0.999994, 0.00235352)
 script = ExtResource("1_psrgf")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.824314, 0)
 shape = SubResource("CapsuleShape3D_cokrq")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Character"]
@@ -81,7 +76,19 @@ offset_right = 16298.0
 offset_bottom = 9799.0
 script = ExtResource("2_ymmdw")
 
-[node name="Sphere Shiny" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.36667, 0.22566, 2.32976)
-mesh = SubResource("SphereMesh_b70oh")
-skeleton = NodePath("")
+[node name="Obstacles" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Obstacles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.49941)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Obstacles/StaticBody3D"]
+mesh = SubResource("PrismMesh_os6tp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Obstacles/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_csb0m")
+
+[node name="Cursor" type="Sprite2D" parent="."]
+top_level = true
+position = Vector2(2.08165e-12, 2.08165e-12)
+texture = ExtResource("3_lp7l3")
+script = ExtResource("4_67w57")
