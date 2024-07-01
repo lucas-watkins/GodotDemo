@@ -7,6 +7,7 @@ public partial class FPSLabel : Label
 	public override void _Ready()
 	{
 		Text = "  fps";
+		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
