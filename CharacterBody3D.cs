@@ -4,12 +4,12 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 {
 	private Camera3D _playerCam;
 	private Node3D _cameraNode;
-	private const float Speed = 20f;
-	private float _gravity = -9.8f;
+	private const float Speed = 10f;
+	private float _gravity = 9.8f;
 	private bool _jumping;
 	private int _jumpHeight = 9;
+	private float _intendedHeight; 
 	private int _jumpForce = 3;
-	private float _tempJumpPos; 
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -20,7 +20,7 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 		
 	}
 
-	private void HandleKeys(float sens)
+	private void HandleKeys(float sens, float delta)
 	{
 		var velocity = Vector3.Zero; 
 		if (Input.IsActionPressed("forward"))
@@ -47,8 +47,8 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 		
 		if (Input.IsActionPressed("up") && IsOnFloor())
 		{
-			_tempJumpPos = Position.Y; 
 				_jumping = true;
+				_intendedHeight = _jumpHeight + Position.Y; 
 		}
 		
 		if (Input.IsKeyPressed(Key.Escape))
@@ -56,32 +56,32 @@ public partial class CharacterBody3D : Godot.CharacterBody3D
 			GetTree().Quit();
 		}
 
-		if (_jumping && Position.Y < _jumpHeight + _tempJumpPos)
+		if (_jumping && Position.Y < _intendedHeight)
 		{
-			velocity -= new Vector3(0, _jumpForce, 0); 
+			// Go up
+			velocity.Y -= _jumpForce * Speed * delta * 10; 
 		}
 
-		if (Position.Y >= _jumpHeight)
+		if (Position.Y >= _intendedHeight)
 		{
-			_tempJumpPos = 0f; 
-			_jumping = false; 
+			_jumping = false;
+		}
+		// gravity
+		if (!IsOnFloor())
+		{
+			velocity.Y += _gravity * delta * 10; 
 		}
 		
 		Velocity = velocity * -sens; 
-		MoveAndSlide(); 
+		MoveAndSlide();
+		
 	}
 	
 	public override void _PhysicsProcess(double delta)
 	{
-		HandleKeys(Speed);
+		HandleKeys(Speed, (float) delta);
 		
-		// gravity
-		if (!IsOnFloor())
-		{
-			var pos = Position;
-			pos.Y += (float)delta * _gravity * 2;
-			Position = pos; 
-		}
+		
 	}
 
 	public override void _Input(InputEvent @event)
